@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CHAT - {% block title %}Welcome!{% endblock %}</title>
+
+    <!-- ikony -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- jQuery-UI -->
+    <link href="{{ asset('vendor/jquery-ui-1.12.1/jquery-ui.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+
+    {% block stylesheets %}{% endblock %}
+
+</head>
+
+<body>
+
+{% block body %}{% endblock %}
+
+<div id="preloader">
+    <div class="label">
+        <img src="{{ asset('images/preloader.gif') }}" alt="wczytywanie..." />
+    </div>
+</div>
+
+<div id="dialog-simple">
+    <div class="dialog-simple-menu">
+        <input placeholder="search.."
+                class="form-control" id="file-manager-file-content-grep" name="fileManagerFileContentGrep" />
+    </div>
+    <pre id="dialog-simple-content"></pre>
+</div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('vendor/jquery-ui-1.12.1/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/preloader.js') }}"></script>
+<script src="{{ asset('js/dialog-link.js') }}"></script>
+<script src="{{ asset('js/darkmode.js') }}"></script>
+
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+    $( function() {
+        $( "#dialog-simple" ).dialog({
+            'title':'',
+            'autoOpen':false,
+            'modal':true,
+            'width':'90%',
+            'height':$(window).height()*0.9
+        });
+    } );
+</script>
+
+{% block javascripts %}{% endblock %}
+
+</body>
+
+</html>

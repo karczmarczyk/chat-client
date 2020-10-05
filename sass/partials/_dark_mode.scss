@@ -1,0 +1,14 @@
+html.dark-mode {
+  filter: invert(88%);
+
+  img {
+    filter: invert(100%) brightness(1.1) contrast(1.2);
+  }
+
+  div#preloader,
+  div.dialog-preloader {
+    //filter: invert(88%);
+    background: white;
+  }
+}
+

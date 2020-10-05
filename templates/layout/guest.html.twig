@@ -1,0 +1,12 @@
+{% extends 'layout/main.html.twig' %}
+
+{% block body %}
+<div class="guest-content">
+    <a class="darkmode-switch btn btn-dark" id="darkmode-switch" href="#"> <i class="fa fa-lightbulb-o" aria-hidden="true"></i> </a>
+    {% block guest %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link href="/css/main-guest.css" rel="stylesheet">
+{% endblock %}

@@ -1,0 +1,7 @@
+@import "partials/variables";
+@import "partials/mixins";
+@import "partials/layout";
+@import "partials/dark_mode";
+
+// Import plików odpowiedzialnych za style widoków.
+@import "../templates/security/login";
