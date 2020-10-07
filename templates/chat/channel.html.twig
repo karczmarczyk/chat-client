@@ -30,7 +30,9 @@
 
         let socket = new WebSocketService(socketLink);
         socket.setFrom(fromId);
+        socket.setFromUserName(fromUserName);
         socket.setTo(toId);
+        socket.setToUserName(toUserName);
 
         /**
          * Wysyłka zawartości TextArea

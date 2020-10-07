@@ -71,11 +71,12 @@ class WebSocketService
     wsOnMessage (evt) {
         let received_msg = evt.data;
         let obj = JSON.parse(received_msg);
+        console.log(obj);
         if ((obj.to==this.from && obj.from==this.to)
             || (obj.from==this.from && obj.to==this.to)
             || (obj.from==this.from && obj.to==this.from) //powiadomienia systemowe
         ) {
-            let txtHtml = '<div>'+obj.fromUserName+' '+obj.dateCreated+'</div>'
+            let txtHtml = '<div>'+obj.fromUserName+' '+this.dateFormat(this.dateParser(obj.dateCreated))+'</div>'
                     + '<div>'+this.contentParser(obj.content)+'</div>';
             let node = document.createElement("LI");
             let className = 'my-message';
@@ -90,6 +91,16 @@ class WebSocketService
 
     contentParser (content) {
         return content.replace(/\n/g, "<br />");
+    }
+
+    dateParser (date) {
+        let newDate = new Date(date.date.year, date.date.month, date.date.day,
+            date.time.hour, date.time.minute, date.time.second);
+        return newDate;
+    }
+
+    dateFormat (date) {
+        return date.toISOString().slice(0,10)+ " " +date.toISOString().slice(11,19);
     }
 
     wsOnClose () {
@@ -111,7 +122,9 @@ class WebSocketService
             isRoom: this.isRoom
         };
         if (message!='' && message!='undefined') {
-            this.ws.send(JSON.stringify(obj));
+            let json = JSON.stringify(obj);
+            console.log(json);
+            this.ws.send(json);
         }
     }
 }
