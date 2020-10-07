@@ -24,7 +24,12 @@ class ChatController extends AbstractController
      */
     public function channelAction ($memberId)
     {
-        return $this->render('chat/channel.html.twig');
+        $userId = $this->getUser()->getId();
+
+        return $this->render('chat/channel.html.twig',[
+            'memberId' => $memberId,
+            'userId' => $userId
+        ]);
     }
 
     /**

@@ -3,6 +3,28 @@
 {% block title %}Channel{% endblock %}
 {% block main_content %}
 
+    <h1>{{ memberId }}</h1>
 
+    <a id="send" href="javascript:void(0)">Send</a>
+    <br>
 
+    <ul id="message"></ul>
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        let from = {{ userId }};
+        let to = {{ memberId }};
+
+        let socketLink = 'ws://localhost:8025/websockets/chat/'+from;
+
+        let socket = new WebSocketService(socketLink);
+        socket.setFrom(from);
+        socket.setTo(to);
+
+        $('#send').click(function() {
+            socket.send();
+        })
+
+    </script>
 {% endblock %}
