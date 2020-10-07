@@ -215,5 +215,56 @@ div.guest-content div.login-card {
   top: 25%;
   left: 25%;
 }
+div.chat {
+  grid-area: p-workspace__primary_view;
+  display: grid;
+  grid-template-columns: auto;
+}
+div.chat div.chat-channel {
+  display: flex;
+  flex-direction: column;
+}
+div.chat div.chat-channel div.chat-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 8px;
+  border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
+  flex-shrink: 0;
+}
+div.chat div.chat-channel div.chat-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+}
+div.chat div.chat-channel div.chat-container div.chat-messages {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+div.chat div.chat-channel div.chat-container div.chat-messages ul.message-container {
+  list-style: none;
+  padding: 0px;
+}
+div.chat div.chat-channel div.chat-container div.chat-messages ul.message-container li {
+  padding: 10px;
+  margin: 5px 0px;
+  border-radius: 5px;
+}
+div.chat div.chat-channel div.chat-container div.chat-messages ul.message-container li.my-message {
+  background: #2C3E50;
+  color: white;
+  margin-left: 50px;
+}
+div.chat div.chat-channel div.chat-container div.chat-messages ul.message-container li.other-message {
+  background: #3B97D3;
+  color: white;
+  margin-right: 50px;
+}
+textarea.message {
+  width: 100%;
+  height: 100px;
+}
 
 /*# sourceMappingURL=main.css.map */

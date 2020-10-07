@@ -16,6 +16,7 @@ class WebSocketService
             return false;
         }
         this.isOpen = false;
+        this.isRoom = false;
         this.connectLink = connectLink;
         this.ws = new WebSocket(connectLink);
         this.wsInit();
@@ -39,6 +40,10 @@ class WebSocketService
         };
     }
 
+    setIsRoom (isRoom) {
+        this.isRoom = isRoom;
+    }
+
     getWs () {
         return this.ws;
     }
@@ -51,6 +56,14 @@ class WebSocketService
         this.to = userId;
     }
 
+    setFromUserName (userName) {
+        this.fromUserName = userName;
+    }
+
+    setToUserName (userName) {
+        this.toUserName = userName;
+    }
+
     wsOnOpen () {
         this.isOpen = true;
     }
@@ -58,13 +71,25 @@ class WebSocketService
     wsOnMessage (evt) {
         let received_msg = evt.data;
         let obj = JSON.parse(received_msg);
-        if (obj.to==this.from || obj.from==this.from) {
-            let txt = obj.from+": "+obj.content;
+        if ((obj.to==this.from && obj.from==this.to)
+            || (obj.from==this.from && obj.to==this.to)
+            || (obj.from==this.from && obj.to==this.from) //powiadomienia systemowe
+        ) {
+            let txtHtml = '<div>'+obj.fromUserName+' '+obj.dateCreated+'</div>'
+                    + '<div>'+this.contentParser(obj.content)+'</div>';
             let node = document.createElement("LI");
-            let textnode = document.createTextNode(txt);
-            node.appendChild(textnode);
+            let className = 'my-message';
+            if (obj.from!=this.from) {
+                className = 'other-message';
+            }
+            node.setAttribute('class', className)
+            node.innerHTML = txtHtml;
             document.getElementById("message").appendChild(node);
         }
+    }
+
+    contentParser (content) {
+        return content.replace(/\n/g, "<br />");
     }
 
     wsOnClose () {
@@ -79,8 +104,11 @@ class WebSocketService
         }
         let obj = {
             from: this.from,
+            fromUserName: this.fromUserName,
             to: this.to,
-            content: message
+            toUserName: this.toUserName,
+            content: message,
+            isRoom: this.isRoom
         };
         if (message!='' && message!='undefined') {
             this.ws.send(JSON.stringify(obj));

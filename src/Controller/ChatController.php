@@ -21,14 +21,18 @@ class ChatController extends AbstractController
 
     /**
      * @Route("/chat-channel/{memberId}", name="chatChannelAction")
+     * @param $memberId
+     * @param UserRepository $userRepository
+     * @return Response
      */
-    public function channelAction ($memberId)
+    public function channelAction ($memberId, UserRepository $userRepository)
     {
-        $userId = $this->getUser()->getId();
+        $user = $this->getUser();
+        $member = $userRepository->find($memberId);
 
         return $this->render('chat/channel.html.twig',[
-            'memberId' => $memberId,
-            'userId' => $userId
+            'member' => $member,
+            'user' => $user
         ]);
     }
 

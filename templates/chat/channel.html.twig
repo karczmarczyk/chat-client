@@ -2,29 +2,46 @@
 
 {% block title %}Channel{% endblock %}
 {% block main_content %}
-
-    <h1>{{ memberId }}</h1>
-
-    <a id="send" href="javascript:void(0)">Send</a>
-    <br>
-
-    <ul id="message"></ul>
+    <div class="chat">
+        <div class="chat-channel">
+            <div class="chat-header">
+                <b> {{ member.userName }} </b>
+            </div>
+            <div class="chat-container">
+                <div class="chat-messages">
+                    <ul id="message" class="message-container"></ul>
+                </div>
+                <div class="chat-panel">
+                    <textarea id="text-message" class="message" placeholder="message.."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 {% block javascripts %}
     <script>
-        let from = {{ userId }};
-        let to = {{ memberId }};
+        let fromId = {{ user.id }};
+        let fromUserName = '{{ user.userName }}';
+        let toId = {{ member.id }};
+        let toUserName = '{{ member.userName }}';
 
-        let socketLink = 'ws://localhost:8025/websockets/chat/'+from;
+        let socketLink = 'ws://localhost:8025/websockets/chat/'+fromId;
 
         let socket = new WebSocketService(socketLink);
-        socket.setFrom(from);
-        socket.setTo(to);
+        socket.setFrom(fromId);
+        socket.setTo(toId);
 
-        $('#send').click(function() {
-            socket.send();
-        })
+        /**
+         * Wysyłka zawartości TextArea
+         */
+        $('#text-message').keypress(function(event) {
+            if (event.keyCode == 13 && !event.shiftKey) {
+                socket.send( $('#text-message').val());
+                $('#text-message').val("");
+                event.preventDefault();
+            }
+        });
 
     </script>
 {% endblock %}
