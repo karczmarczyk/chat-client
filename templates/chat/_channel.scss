@@ -38,6 +38,18 @@
               padding: 10px;
               margin: 5px 0px;
               border-radius: 5px;
+
+              div.from-user-name {
+                font-size: 10px;
+              }
+              div.date-created {
+                font-size: 10px;
+                text-align: right;
+              }
+
+              div.message-body {
+                margin-top: 10px;
+              }
             }
 
             li.my-message {

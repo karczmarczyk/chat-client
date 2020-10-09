@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +35,23 @@ class ChatController extends AbstractController
             'member' => $member,
             'user' => $user
         ]);
+    }
+
+    /**
+     * @Route("/chat-messages/{memberId}", name="chatMessagesAction")
+     *
+     * @param UserRepository $userRepository
+     * @param MessageRepository $messageRepository
+     * @param $memberId
+     * @return mixed
+     */
+    public function messagesAction (UserRepository $userRepository, MessageRepository $messageRepository, $memberId) {
+        $fromUser = $this->getUser();
+        $toUser = $userRepository->find($memberId);
+
+        $messages = $messageRepository->findConversation($fromUser, $toUser);
+
+        return $this->json(['messages' => array_reverse($messages)]);
     }
 
     /**

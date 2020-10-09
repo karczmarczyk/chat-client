@@ -17,4 +17,25 @@ class MessageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Message::class);
     }
+
+    public function findConversation ($fromUser, $toUser) {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT m
+            FROM App\Entity\Message m
+            WHERE
+                (m.fromUser = :fromUser AND m.toUser = :toUser)
+                    OR  
+                (m.fromUser = :toUser AND m.toUser = :fromUser)
+            ORDER BY m.id DESC'
+        )
+            ->setParameter('fromUser', $fromUser)
+            ->setParameter('toUser',  $toUser)
+            ->setMaxResults(10)
+        ;
+
+        // returns an array of Product objects
+        return $query->getResult();
+    }
 }

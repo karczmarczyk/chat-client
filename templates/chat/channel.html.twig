@@ -9,7 +9,7 @@
             </div>
             <div class="chat-container">
                 <div class="chat-messages">
-                    <ul id="message" class="message-container"></ul>
+                    <div id="message"></div>
                 </div>
                 <div class="chat-panel">
                     <textarea id="text-message" class="message" placeholder="message.."></textarea>
@@ -26,13 +26,18 @@
         let toId = {{ member.id }};
         let toUserName = '{{ member.userName }}';
 
+        let messagesUrl = "{{ path('chatMessagesAction',{memberId: member.id}) | escape('js') }}";
+
         let socketLink = 'ws://localhost:8025/websockets/chat/'+fromId;
+
+        let channelBuilder = new ChannelBuilder('message');
 
         let socket = new WebSocketService(socketLink);
         socket.setFrom(fromId);
         socket.setFromUserName(fromUserName);
         socket.setTo(toId);
         socket.setToUserName(toUserName);
+        socket.setChannelBuilder(channelBuilder);
 
         /**
          * Wysyłka zawartości TextArea
@@ -44,6 +49,28 @@
                 event.preventDefault();
             }
         });
+
+        $.get( messagesUrl )
+            .done(function(response){
+                let messages = response.messages;
+                for (let i=0; i<messages.length; i++) {
+                    let message = messages[i];
+                    let obj = {
+                        from: message.fromUser.id,
+                        fromUserName: message.fromUser.username,
+                        to: message.toUser.id,
+                        toUserName: message.toUser.username,
+                        content: message.content,
+                        dateCreated: message.created,
+                        isRoom: false, //todo
+                    };
+                    channelBuilder.appendRow(obj, obj.from==fromId);
+                }
+
+            })
+            .fail(function(response){
+                alert("Nieoczekiwany błąd");
+            });
 
     </script>
 {% endblock %}

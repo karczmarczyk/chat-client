@@ -22,6 +22,10 @@ class WebSocketService
         this.wsInit();
     }
 
+    setChannelBuilder (channelBuilder) {
+        this.channelBuilder = channelBuilder;
+    }
+
     reconnect () {
         this.ws = new WebSocket(this.connectLink);
         this.wsInit();
@@ -74,33 +78,10 @@ class WebSocketService
         console.log(obj);
         if ((obj.to==this.from && obj.from==this.to)
             || (obj.from==this.from && obj.to==this.to)
-            || (obj.from==this.from && obj.to==this.from) //powiadomienia systemowe
+            //|| (obj.from==this.from && obj.to==this.from) //powiadomienia systemowe
         ) {
-            let txtHtml = '<div>'+obj.fromUserName+' '+this.dateFormat(this.dateParser(obj.dateCreated))+'</div>'
-                    + '<div>'+this.contentParser(obj.content)+'</div>';
-            let node = document.createElement("LI");
-            let className = 'my-message';
-            if (obj.from!=this.from) {
-                className = 'other-message';
-            }
-            node.setAttribute('class', className)
-            node.innerHTML = txtHtml;
-            document.getElementById("message").appendChild(node);
+            this.channelBuilder.appendRow(obj, obj.from==this.from);
         }
-    }
-
-    contentParser (content) {
-        return content.replace(/\n/g, "<br />");
-    }
-
-    dateParser (date) {
-        let newDate = new Date(date.date.year, date.date.month, date.date.day,
-            date.time.hour, date.time.minute, date.time.second);
-        return newDate;
-    }
-
-    dateFormat (date) {
-        return date.toISOString().slice(0,10)+ " " +date.toISOString().slice(11,19);
     }
 
     wsOnClose () {
