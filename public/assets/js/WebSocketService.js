@@ -80,7 +80,12 @@ class WebSocketService
             || (obj.from==this.from && obj.to==this.to)
             //|| (obj.from==this.from && obj.to==this.from) //powiadomienia systemowe
         ) {
-            this.channelBuilder.appendRow(obj, obj.from==this.from);
+            let isMyMessage = obj.from==this.from;
+            if (! isMyMessage && ("Notification" in window) && Notification.permission === "granted") {
+                // jeżeli są tworzymy powiadomienie
+                var notification = new Notification(obj.content);
+            }
+            this.channelBuilder.appendRow(obj, isMyMessage);
         }
     }
 

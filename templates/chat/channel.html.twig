@@ -21,6 +21,13 @@
 {% endblock %}
 {% block javascripts %}
     <script>
+
+        // pozwolenie na powiadomienia
+        if (("Notification" in window) && Notification.permission !== 'denied') {
+            Notification.requestPermission(function (permission) {
+            });
+        }
+
         let fromId = {{ user.id }};
         let fromUserName = '{{ user.userName }}';
         let toId = {{ member.id }};
