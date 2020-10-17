@@ -72,10 +72,19 @@ class WebSocketService
         this.isOpen = true;
     }
 
+    wsOnMessageBefore (obj) {
+
+    }
+
+    wsOnMessageAfter (obj) {
+
+    }
+
     wsOnMessage (evt) {
         let received_msg = evt.data;
         let obj = JSON.parse(received_msg);
         console.log(obj);
+        this.wsOnMessageBefore(obj);
         if ((obj.to==this.from && obj.from==this.to)
             || (obj.from==this.from && obj.to==this.to)
             //|| (obj.from==this.from && obj.to==this.from) //powiadomienia systemowe
@@ -87,18 +96,30 @@ class WebSocketService
             }
             this.channelBuilder.appendRow(obj, isMyMessage);
         }
+        this.wsOnMessageAfter(obj)
     }
 
     wsOnClose () {
         this.isOpen = false;
-        alert("Connection is closed...");
+        console.log("Connection is closed...");
+        //alert("Connection is closed...");
+    }
+
+    beforeSend (message) {
+        return message
+    }
+
+    afterSend () {
+
     }
 
     send (message) {
         if (!this.isOpen) {
+            console.log("Connection is closed.");
             alert("Connection is closed.");
             return;
         }
+        message = this.beforeSend(message);
         let obj = {
             from: this.from,
             fromUserName: this.fromUserName,
@@ -111,6 +132,7 @@ class WebSocketService
             let json = JSON.stringify(obj);
             console.log(json);
             this.ws.send(json);
+            this.afterSend()
         }
     }
 }

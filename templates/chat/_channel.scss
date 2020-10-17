@@ -23,11 +23,14 @@
         flex-direction: column;
         flex: 1;
         position: relative;
+        height: calc(100vh - 125px);
 
         div.chat-messages {
           flex: 1;
           min-height: 0;
           position: relative;
+          overflow-y: scroll;
+          overflow-x: hidden;
 
           ul.message-container {
 
@@ -66,7 +69,16 @@
         }
 
         div.chat-panel {
-
+          div.unread-messages {
+            display: none;
+            margin-top: -50px;
+            margin-left: 33%;
+            position: absolute;
+            background: indianred;
+            color: white;
+            padding:20px;
+            cursor: pointer;
+          }
         }
       }
     }

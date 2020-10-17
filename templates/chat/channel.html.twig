@@ -7,11 +7,14 @@
             <div class="chat-header">
                 <b> {{ member.userName }} </b>
             </div>
-            <div class="chat-container">
-                <div class="chat-messages">
+            <div class="chat-container" >
+                <div class="chat-messages" id="scrollable-chat-container">
                     <div id="message"></div>
                 </div>
                 <div class="chat-panel">
+                    <div class="unread-messages" id="unread-messages">
+                        Masz nieprzeczytane wiadomości
+                    </div>
                     <textarea id="text-message" class="message" placeholder="message.."></textarea>
                 </div>
             </div>
@@ -73,11 +76,47 @@
                     };
                     channelBuilder.appendRow(obj, obj.from==fromId);
                 }
+                consoleGoToBottom('#scrollable-chat-container');
 
             })
             .fail(function(response){
                 alert("Nieoczekiwany błąd");
             });
+
+        socket.wsOnMessageBefore = function (obj) {
+            this.isConsoleOnBottom = isConsoleOnBottom('#scrollable-chat-container');
+        }
+
+        socket.wsOnMessageAfter = function (obj) {
+            if (this.isConsoleOnBottom) {
+                consoleGoToBottom('#scrollable-chat-container');
+            } else {
+                $('#unread-messages').show();
+            }
+        }
+
+        socket.afterSend = function () {
+            consoleGoToBottom('#scrollable-chat-container');
+        }
+
+        function isConsoleOnBottom (selector) {
+            let messageBody = document.querySelector(selector);
+            let scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+            // if (messageBody.scrollTop==0) {
+            //     return true;
+            // }
+            return scrollTop-messageBody.scrollTop==0;
+        }
+
+        function consoleGoToBottom (selector) {
+            let messageBody = document.querySelector(selector);
+            messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+        }
+
+        $('#unread-messages').click(function () {
+            consoleGoToBottom('#scrollable-chat-container');
+            $('#unread-messages').hide();
+        })
 
     </script>
 {% endblock %}
